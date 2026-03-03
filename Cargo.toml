@@ -5,3 +5,6 @@ edition = "2024"
 description = "Library of common errors and validation functions I use with sqlx"
 
 [dependencies]
+sqlx = { version = "0.8.6", features = ["postgres"] }
+thiserror = "2.0.18"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
