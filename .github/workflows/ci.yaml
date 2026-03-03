@@ -33,4 +33,4 @@ jobs:
         run: nix develop .#build --command enterTest
 
       - name: Run test and build
-        run: nix develop .#build --command just
+        run: nix develop .#build --command just build
