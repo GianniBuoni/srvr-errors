@@ -1,6 +1,6 @@
 use std::{collections::HashSet, fmt::Display, sync::Arc};
 
-use sqlx::{PgPool, types::Uuid};
+use sqlx::{Connection, types::Uuid};
 
 use crate::prelude::*;
 
@@ -46,7 +46,10 @@ impl Validation {
             )),
         }
     }
-    pub async fn try_check_unique_constraint(&self, _conn: &PgPool) -> Result<&Self, ClientError> {
+    pub async fn try_check_unique_constraint(
+        &self,
+        _conn: impl Connection,
+    ) -> Result<&Self, ClientError> {
         todo!()
     }
     pub fn try_check_uuid(&self) -> Result<&Self, ClientError> {
@@ -62,7 +65,10 @@ impl Validation {
             false => Err(ClientError::Uuid(bad.join(", "))),
         }
     }
-    pub async fn try_check_if_entry_exists(&self, _conn: &PgPool) -> Result<&Self, ClientError> {
+    pub async fn try_check_if_entry_exists(
+        &self,
+        _conn: impl Connection,
+    ) -> Result<&Self, ClientError> {
         todo!()
     }
     pub fn new(args: Arc<[String]>, table: impl Display, task: impl Display) -> Self {
@@ -76,8 +82,6 @@ impl Validation {
 
 #[cfg(test)]
 mod tests {
-    use sqlx::types::Uuid;
-
     use super::*;
 
     fn empty_args() -> (Arc<[String]>, String) {
