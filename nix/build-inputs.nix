@@ -8,6 +8,10 @@
         name = "PGDATA";
         value = ".postgres";
       }
+      {
+        name = "DATABASE_URL";
+        value = "postgres://[::1]:5432";
+      }
     ];
 
     commands = [

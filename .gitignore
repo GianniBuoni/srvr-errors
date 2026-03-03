@@ -1,9 +1,5 @@
 .direnv
 .envrc
-target/
-result/
-
-
-# Added by cargo
-
 /target
+/result
+/.postgres
