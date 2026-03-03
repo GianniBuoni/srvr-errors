@@ -14,7 +14,10 @@ impl Arguments {
         };
         match found.is_empty() {
             true => Ok(()),
-            false => Err(ClientError::UniqueConstraint(found.join(", ").into())),
+            false => Err(ClientError::UniqueConstraint(
+                self.table.clone(),
+                found.join(", ").into(),
+            )),
         }
     }
 }
@@ -52,7 +55,8 @@ mod test {
             match got {
                 Ok(e) => panic!("{EXPECTED_ERROR} {e:?}, {desc}"),
                 Err(e) => {
-                    let want = ClientError::UniqueConstraint(out.into()).to_string();
+                    let want =
+                        ClientError::UniqueConstraint("users".into(), out.into()).to_string();
                     assert_eq!(want, e.to_string());
                 }
             }

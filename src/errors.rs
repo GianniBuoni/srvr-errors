@@ -29,8 +29,8 @@ pub enum ClientError {
     EntryNotFound(Arc<str>, Arc<str>),
     #[error("Arugments to server must all be unique: Value(s) '{0}'")]
     RepeatArgs(String),
-    #[error("Arguments to server are already in the database: Value(s): '{0}'")]
-    UniqueConstraint(Arc<str>),
+    #[error("Arguments to server are already in Table {0}, Value(s): '{1}'")]
+    UniqueConstraint(Arc<str>, Arc<str>),
     #[error("Cannot parse as uuid: Value(s) '{0}'")]
     Uuid(String),
 }
