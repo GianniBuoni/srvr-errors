@@ -4,7 +4,11 @@ version = "0.1.0"
 edition = "2024"
 description = "Library of common errors and validation functions I use with sqlx"
 
+[features]
+tonic = ["dep:tonic"]
+
 [dependencies]
 sqlx = { version = "0.8.6", features = ["postgres"] }
 thiserror = "2.0.18"
 tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
+tonic = { version = "0.14.5", optional = true }
