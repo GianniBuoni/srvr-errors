@@ -1,5 +1,5 @@
 -- Up
 CREATE TABLE users (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id uuid PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
   name TEXT NOT NULL
 );

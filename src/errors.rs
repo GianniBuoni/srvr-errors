@@ -23,14 +23,68 @@ pub enum ValConfigError {
 #[derive(Error, Debug)]
 /// Handles a number of issues with client side validations
 pub enum ClientError {
+    /// For when client sends an empty request.
+    /// Error returns the failed task.
+    /// ```
+    /// use srvr_errors::prelude::*;
+    ///
+    /// let task = "user_create";
+    ///
+    /// let err = ClientError::EmptyArgs(task.into());
+    /// ```
     #[error("Arguments must be passed for this service: {0}")]
     EmptyArgs(Arc<str>),
+    /// For when client sends arguments that need to already exist
+    /// in the database, but some do not exist.
+    /// Error returns the table name and the offending values.
+    /// ```
+    /// use srvr_errors::prelude::*;
+    ///
+    /// let table = "users";
+    /// let not_found = "john, paul, ringo, george";
+    ///
+    /// let err = ClientError::EntryNotFound(table.into(), not_found.into());
+    /// ```
     #[error("Cannot edit or delete non existant entries: Value(s): '{0}'")]
     EntryNotFound(Arc<str>, Arc<str>),
+    /// For when client sends arguments that have arguments that repeat.
+    /// Sending non-unique values to the db could create issues with
+    /// unique constraints.
+    /// Error returns the offending values.
+    /// ```
+    /// use srvr_errors::prelude::*;
+    ///
+    /// let args = "john, john, john";
+    /// let repeated_values = "john";
+    ///
+    /// let err = ClientError::RepeatArgs(repeated_values.into());
+    /// ```
     #[error("Arugments to server must all be unique: Value(s) '{0}'")]
     RepeatArgs(String),
-    #[error("Arguments to server are already in the database: Value(s): '{0}'")]
-    UniqueConstraint(Arc<str>),
+    /// For when client sends arguments that would violate a table's
+    /// unique constraint.
+    /// Error returns the table name and the offending values.
+    /// ```
+    /// use srvr_errors::prelude::*;
+    ///
+    /// let table = "users";
+    /// let non_unique_value = "john";
+    ///
+    /// let err = ClientError::UniqueConstraint(
+    ///     table.into(), non_unique_value.into(),
+    /// );
+    /// ```
+    #[error("Arguments to server are already in Table {0}, Value(s): '{1}'")]
+    UniqueConstraint(Arc<str>, Arc<str>),
+    /// For when client sends arguments that aren't valid uuids.
+    /// Error returns the offending values.
+    /// ```
+    /// use srvr_errors::prelude::*;
+    ///
+    /// let bad_uuid_value = "john";
+    ///
+    /// let err = ClientError::Uuid(bad_uuid_value.into());
+    /// ```
     #[error("Cannot parse as uuid: Value(s) '{0}'")]
     Uuid(String),
 }
