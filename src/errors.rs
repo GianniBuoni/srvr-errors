@@ -7,11 +7,18 @@ use tonic::Status;
 pub mod prelude {
     #[cfg(test)]
     pub use super::EXPECTED_ERROR;
-    pub use super::{ClientError, DbError};
+    pub use super::{ClientError, DbError, ValConfigError};
 }
 
 #[cfg(test)]
 pub const EXPECTED_ERROR: &str = "Test expected error but returned:";
+
+#[derive(Error, Debug)]
+/// Handles issues with validation builder errors
+pub enum ValConfigError {
+    #[error("Argument validation configuration invalid: Field '{0}' missing")]
+    Arguments(&'static str),
+}
 
 #[derive(Error, Debug)]
 /// Handles a number of issues with client side validations
