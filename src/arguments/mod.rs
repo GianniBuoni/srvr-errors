@@ -6,8 +6,11 @@ pub mod prelude {
     pub use super::{Arguments, ArgumentsBuilder};
 }
 
+mod select;
 mod try_check_empty_args;
+mod try_check_entry_exists;
 mod try_check_repeat_args;
+mod try_check_unique_constraint;
 mod try_check_uuid;
 
 /// Configures argument validation checks.
@@ -89,6 +92,14 @@ mod tests {
                 "george".into(),
             ]),
             "john, paul, ringo, george".into(),
+        )
+    }
+    #[cfg(feature = "postgres")]
+    /// Test case of arguments unique to the database
+    pub fn entry_not_exists() -> (Arc<[String]>, String) {
+        (
+            Arc::new(["balto".into(), "air bud".into()]),
+            "balto, air bud".into(),
         )
     }
 
