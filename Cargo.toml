@@ -1,0 +1,7 @@
+[package]
+name = "srvr-errors"
+version = "0.1.0"
+edition = "2024"
+description = "Library of common errors and validation functions I use with sqlx"
+
+[dependencies]
