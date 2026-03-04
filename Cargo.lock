@@ -1431,7 +1431,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "srvr-errors"
+name = "srvr_errors"
 version = "0.1.0"
 dependencies = [
  "anyhow",
