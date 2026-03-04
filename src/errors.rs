@@ -20,6 +20,13 @@ pub enum ValConfigError {
     Arguments(&'static str),
 }
 
+#[cfg(feature = "tonic")]
+impl From<ValConfigError> for Status {
+    fn from(value: ValConfigError) -> Self {
+        Status::internal(value.to_string())
+    }
+}
+
 #[derive(Error, Debug)]
 /// Handles a number of issues with client side validations
 pub enum ClientError {
