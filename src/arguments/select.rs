@@ -80,7 +80,7 @@ mod tests {
 
             if should_pass {
                 assert_eq!(want, got?, "{desc}");
-                break;
+                continue;
             }
             assert!(got.is_err(), "{desc}")
         }

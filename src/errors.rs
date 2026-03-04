@@ -81,7 +81,7 @@ pub enum ClientError {
     ///     table.into(), non_unique_value.into(),
     /// );
     /// ```
-    #[error("Arguments to server are already in Table {0}, Value(s): '{1}'")]
+    #[error("Arguments to server are already in Table '{0}', Value(s): '{1}'")]
     UniqueConstraint(Arc<str>, Arc<str>),
     /// For when client sends arguments that aren't valid uuids.
     /// Error returns the offending values.

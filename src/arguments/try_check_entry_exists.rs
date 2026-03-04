@@ -62,12 +62,12 @@ mod test {
 
             if should_pass {
                 assert!(got.is_ok(), "{desc}");
-                break;
+                continue;
             }
             match got {
                 Ok(e) => panic!("{EXPECTED_ERROR} {e:?}, {desc}"),
                 Err(e) => {
-                    let want = ClientError::EntryNotFound("ueers".into(), out.into()).to_string();
+                    let want = ClientError::EntryNotFound("users".into(), out.into()).to_string();
                     assert_eq!(want, e.to_string());
                 }
             }
