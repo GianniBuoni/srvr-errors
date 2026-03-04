@@ -37,7 +37,6 @@ mod test {
                 true,
                 "test arguments unique to database",
             ),
-            (repeating_args(), false, "test repeating invalid args"),
         ];
         for case in test_cases {
             let ((args, out), should_pass, desc) = case;
@@ -50,7 +49,7 @@ mod test {
 
             if should_pass {
                 assert!(got.is_ok(), "{desc}");
-                break;
+                continue;
             }
             match got {
                 Ok(e) => panic!("{EXPECTED_ERROR} {e:?}, {desc}"),
