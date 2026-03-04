@@ -1,12 +1,12 @@
+build: test
+  cargo build -F postgres
+
 lint:
   cargo fmt --check
   cargo clippy --all-targets --all-features -- -D warnings
 
 test: _init_db
   cargo test -F postgres
-
-build: test
-  cargo build -F postgres
 
 @_start_db:
   if [ "$(pg_ctl status | grep 'no server running')" = "" ]; then \
