@@ -3,7 +3,7 @@ use std::{fmt::Display, sync::Arc};
 use crate::prelude::*;
 
 pub mod prelude {
-    pub use super::{Arguments, ArgumentsBuilder};
+    pub use super::Arguments;
 }
 
 mod select;
@@ -14,7 +14,6 @@ mod try_check_unique_constraint;
 mod try_check_uuid;
 
 /// Configures argument validation checks.
-#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Arguments {
     args: Arc<[String]>,
@@ -22,6 +21,12 @@ pub struct Arguments {
     table: Arc<str>,
     task: Arc<str>,
     uuid: bool,
+}
+
+impl Arguments {
+    pub fn builder(args: Arc<[String]>) -> ArgumentsBuilder {
+        ArgumentsBuilder::new(args)
+    }
 }
 
 /// Builder type for Arguments.
