@@ -14,6 +14,7 @@ mod try_check_unique_constraint;
 mod try_check_uuid;
 
 /// Configures argument validation checks.
+/// Type state indicates no argument validations have been made
 #[derive(Debug)]
 pub struct Arguments {
     args: Arc<[String]>,
@@ -38,6 +39,16 @@ pub struct ArgumentsBuilder {
     task: Option<Arc<str>>,
     uuid: bool,
 }
+
+/// Type state wrapper arround Arguments that indicates
+/// That arguments have been checked for empty Arguments.
+#[derive(Debug)]
+pub struct ArgumentsCheckedEmpty(Arguments);
+
+/// Tybe state wrapper around Argument that indicages
+/// that arguments have been checked for repeating Arguments.
+#[derive(Debug)]
+pub struct ArgumentsCheckedRepeating(Arguments);
 
 impl ArgumentsBuilder {
     pub fn new(args: Arc<[String]>) -> Self {

@@ -2,12 +2,12 @@ use std::collections::HashSet;
 
 use super::*;
 
-impl Arguments {
-    pub fn try_check_repeated_args(&self) -> Result<&Self, ClientError> {
+impl ArgumentsCheckedEmpty {
+    pub fn try_check_repeated_args(self) -> Result<ArgumentsCheckedRepeating, ClientError> {
         let mut unique = HashSet::new();
         let mut repeat = HashSet::new();
 
-        self.args.iter().for_each(|f| match unique.insert(f) {
+        self.0.args.iter().for_each(|f| match unique.insert(f) {
             true => (),
             false => {
                 repeat.insert(f);
@@ -15,7 +15,7 @@ impl Arguments {
         });
 
         match repeat.is_empty() {
-            true => Ok(self),
+            true => Ok(ArgumentsCheckedRepeating(self.0)),
             false => Err(ClientError::RepeatArgs(
                 repeat
                     .into_iter()
@@ -34,7 +34,6 @@ mod tests {
     #[test]
     fn test_repeat_args() -> anyhow::Result<()> {
         let tests_cases = [
-            (empty_args(), true, "test empty args"),
             (entry_exists(), true, "test completely unique args"),
             (repeating_args(), false, "test repeating args"),
         ];
@@ -48,7 +47,7 @@ mod tests {
                     .with_table("users")
                     .try_build()?;
 
-                let got = got.try_check_repeated_args();
+                let got = got.try_check_empty_args()?.try_check_repeated_args();
 
                 if should_pass {
                     assert!(got.is_ok(), "{desc}");

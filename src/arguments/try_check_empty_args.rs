@@ -1,11 +1,11 @@
 use super::*;
 
 impl Arguments {
-    pub fn try_check_empty_args(&self) -> Result<&Self, ClientError> {
+    pub fn try_check_empty_args(self) -> Result<ArgumentsCheckedEmpty, ClientError> {
         if self.args.is_empty() {
             return Err(ClientError::EmptyArgs(self.task.clone()));
         }
-        Ok(self)
+        Ok(ArgumentsCheckedEmpty(self))
     }
 }
 
