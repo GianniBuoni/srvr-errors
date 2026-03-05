@@ -2,9 +2,10 @@ use sqlx::types::Uuid;
 
 use super::*;
 
-impl Arguments {
-    pub fn try_check_uuid(&self) -> Result<&Self, ClientError> {
+impl ArgumentsCheckedRepeating {
+    pub fn try_check_uuid(self) -> Result<Self, ClientError> {
         let bad = self
+            .0
             .args
             .iter()
             .filter(|f| Uuid::try_parse(f).is_err())
@@ -30,9 +31,7 @@ mod tests {
     #[test]
     fn test_uuid() -> anyhow::Result<()> {
         let tests_cases = [
-            (empty_args(), true, "test empty args"),
             (entry_exists(), false, "test completely unique args"),
-            (repeating_args(), false, "test repeating args"),
             (valid_uuids(), true, "test valid uuids"),
         ];
 
@@ -46,7 +45,10 @@ mod tests {
                     .args_are_uuid()
                     .try_build()?;
 
-                let got = got.try_check_uuid();
+                let got = got
+                    .try_check_empty_args()?
+                    .try_check_repeated_args()?
+                    .try_check_uuid();
 
                 if should_pass {
                     assert!(got.is_ok(), "{desc}");

@@ -1,21 +1,21 @@
 #![cfg(feature = "postgres")]
 use super::*;
 
-impl Arguments {
+impl ArgumentsCheckedRepeating {
     /// Check database if given args are already in the configured table column.
     /// Returns a ClientError if any are found along with offending values.
     pub async fn try_check_unique_constraint(
         &self,
         conn: impl sqlx::PgExecutor<'_>,
     ) -> Result<(), ClientError> {
-        let found = match self.select_statement(conn).await {
+        let found = match self.0.select_statement(conn).await {
             Ok(f) => f,
             Err(_) => return Ok(()),
         };
         match found.is_empty() {
             true => Ok(()),
             false => Err(ClientError::UniqueConstraint(
-                self.table.clone(),
+                self.0.table.clone(),
                 found.join(", ").into(),
             )),
         }
@@ -45,7 +45,12 @@ mod test {
                 .with_column("name")
                 .with_task("user_create")
                 .try_build()?;
-            let got = got.try_check_unique_constraint(&conn).await;
+
+            let got = got
+                .try_check_empty_args()?
+                .try_check_repeated_args()?
+                .try_check_unique_constraint(&conn)
+                .await;
 
             if should_pass {
                 assert!(got.is_ok(), "{desc}");

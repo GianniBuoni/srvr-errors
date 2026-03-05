@@ -3,7 +3,7 @@ use std::{fmt::Display, sync::Arc};
 use crate::prelude::*;
 
 pub mod prelude {
-    pub use super::{Arguments, ArgumentsBuilder};
+    pub use super::Arguments;
 }
 
 mod select;
@@ -14,7 +14,7 @@ mod try_check_unique_constraint;
 mod try_check_uuid;
 
 /// Configures argument validation checks.
-#[allow(dead_code)]
+/// Type state indicates no argument validations have been made
 #[derive(Debug)]
 pub struct Arguments {
     args: Arc<[String]>,
@@ -22,6 +22,12 @@ pub struct Arguments {
     table: Arc<str>,
     task: Arc<str>,
     uuid: bool,
+}
+
+impl Arguments {
+    pub fn builder(args: Arc<[String]>) -> ArgumentsBuilder {
+        ArgumentsBuilder::new(args)
+    }
 }
 
 /// Builder type for Arguments.
@@ -33,6 +39,16 @@ pub struct ArgumentsBuilder {
     task: Option<Arc<str>>,
     uuid: bool,
 }
+
+/// Type state wrapper arround Arguments that indicates
+/// That arguments have been checked for empty Arguments.
+#[derive(Debug)]
+pub struct ArgumentsCheckedEmpty(Arguments);
+
+/// Tybe state wrapper around Argument that indicages
+/// that arguments have been checked for repeating Arguments.
+#[derive(Debug)]
+pub struct ArgumentsCheckedRepeating(Arguments);
 
 impl ArgumentsBuilder {
     pub fn new(args: Arc<[String]>) -> Self {
