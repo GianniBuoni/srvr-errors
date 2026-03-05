@@ -52,7 +52,7 @@ pub enum ClientError {
     ///
     /// let err = ClientError::EntryNotFound(table.into(), not_found.into());
     /// ```
-    #[error("Cannot edit or delete non existant entries: Value(s): '{0}'")]
+    #[error("Cannot edit or delete non existant entries from Table: '{0}': Value(s): '{1}'")]
     EntryNotFound(Arc<str>, Arc<str>),
     /// For when client sends arguments that have arguments that repeat.
     /// Sending non-unique values to the db could create issues with
